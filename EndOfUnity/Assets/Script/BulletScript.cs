@@ -21,4 +21,11 @@ public class BulletScript: MonoBehaviour {
 		//5秒後に消滅
 		Destroy(gameObject, 5);
 	}
+
+	void OnTriggerEnter2D (Collider2D col)
+	{
+		if (col.gameObject.tag == "Enemy") {
+			Destroy (gameObject);
+		}
+	}
 }
