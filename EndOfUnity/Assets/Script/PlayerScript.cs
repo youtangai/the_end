@@ -11,11 +11,13 @@ public class PlayerScript : MonoBehaviour {
 	private Rigidbody2D rigidbody2D;
 	private Animator anim;
 	private bool isGrounded;
+	private Renderer renderer;
 
 	void Start () {
 		//各コンポーネントをキャッシュしておく
 		anim = GetComponent<Animator>();
 		rigidbody2D = GetComponent<Rigidbody2D>();
+		renderer = GetComponent<Renderer> ();
 	}
 
 	void Update()
@@ -102,5 +104,33 @@ public class PlayerScript : MonoBehaviour {
 			//Dash→Wait
 			anim.SetBool ("Dash", false);
 		}
+	}
+
+	void OnCollisionEnter2D(Collision2D col)
+	{
+		//Enemyとぶつかった時にコルーチンを実行
+		if (col.gameObject.tag == "Enemy") {
+			StartCoroutine ("Damage");
+		}
+	}
+
+	IEnumerator Damage(){
+		//レイヤーをPlayerDamageに変更
+		gameObject.layer = LayerMask.NameToLayer("PlayerDamage");
+		//while文を10回ループ
+		int count = 10;
+		while (count > 0){
+			//透明にする
+			renderer.material.color = new Color(1,1,1,0);
+			//0.05秒待つ
+			yield return new WaitForSeconds(0.05f);
+			//元に戻す
+			renderer.material.color = new Color(1,1,1,1);
+			//0.05秒待つ
+			yield return new WaitForSeconds(0.05f);
+			count--;
+		}
+		//レイヤーをPlayerにもどす
+		gameObject.layer = LayerMask.NameToLayer("Player");
 	}
 }
