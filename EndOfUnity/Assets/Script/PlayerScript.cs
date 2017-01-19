@@ -48,8 +48,10 @@ public class PlayerScript : MonoBehaviour {
 		anim.SetBool("isJumping", isJumping);
 		anim.SetBool("isFalling", isFalling);
 		if (Input.GetKeyDown ("left ctrl")){
+			float velX = rigidbody2D.velocity.x;
+			float muzzle = velX > 0f ? 0.8f : (-1 * 0.8f);//銃口の位置
 			anim.SetTrigger("Shot");
-			Instantiate(bullet, transform.position + new Vector3(0.8f,1.2f,0f), transform.rotation);
+			Instantiate(bullet, transform.position + new Vector3(muzzle,1.2f,0f), transform.rotation);
 		}
 	}
 
