@@ -5,7 +5,10 @@ public class Enemy1Script : MonoBehaviour {
 
 	Rigidbody2D rigidbody2D;
 	public int speed = -3;
-	public GameObject explosion;
+	public GameObject explosion;//爆発のエフェクト
+
+	public int attackPoint = 10;//ダメージ量
+	public LifeScript lifeScript;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +25,15 @@ public class Enemy1Script : MonoBehaviour {
 		if (col.tag == "Bullet") {
 			Destroy (gameObject);
 			Instantiate (explosion, transform.position, transform.rotation);
+		}
+	}
+
+	void OnCollisionEnter2D (Collision2D col)
+	{
+		//UnityChanとぶつかった時
+		if (col.gameObject.tag == "UnityChan") {
+			//LifeScriptのLifeDownメソッドを実行
+			lifeScript.LifeDown(attackPoint);
 		}
 	}
 }
