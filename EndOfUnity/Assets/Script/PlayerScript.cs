@@ -48,8 +48,12 @@ public class PlayerScript : MonoBehaviour {
 		anim.SetBool("isJumping", isJumping);
 		anim.SetBool("isFalling", isFalling);
 		if (Input.GetKeyDown ("left ctrl")){
-			float velX = rigidbody2D.velocity.x;
-			float muzzle = velX > 0f ? 0.8f : (-1 * 0.8f);//銃口の位置
+			float dirX = rigidbody2D.transform.localScale.x;
+			float muzzle;//銃口の位置
+			if (dirX < 0)
+				muzzle = -1 * 0.8f;
+			else
+				muzzle = 0.8f;
 			anim.SetTrigger("Shot");
 			Instantiate(bullet, transform.position + new Vector3(muzzle,1.2f,0f), transform.rotation);
 		}
@@ -71,7 +75,7 @@ public class PlayerScript : MonoBehaviour {
 			anim.SetBool ("Dash", true);
 			//左も右も入力していなかったら
 
-			//画面中央から左に4移動した位置お画面中央にする
+			//画面中央から左に4移動した位置を画面中央にする
 			if (transform.position.x > mainCamera.transform.position.x - 4) {
 				//カメラの位置を取得
 				Vector3 cameraPos = mainCamera.transform.position;
