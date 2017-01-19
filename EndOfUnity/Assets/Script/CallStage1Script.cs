@@ -5,7 +5,7 @@ public class CallStage1Script : MonoBehaviour {
 
 	void Update ()
 	{
-		if (Input.GetMouseButtonDown (0)) {
+		if(Input.GetKeyDown ("space")){
 			Application.LoadLevel("Stage1");
 		}
 	}

@@ -29,7 +29,7 @@ public class LifeScript : MonoBehaviour {
 		if (gameOver) {
 			gameOverText.enabled = true;
 
-			if (Input.GetMouseButtonDown (0)) {
+			if (Input.GetKeyDown("space")) {
 				Application.LoadLevel ("Title");
 			}
 		}
