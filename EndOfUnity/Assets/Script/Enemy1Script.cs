@@ -10,6 +10,11 @@ public class Enemy1Script : MonoBehaviour {
 	public int attackPoint = 10;//ダメージ量
 	private LifeScript lifeScript;
 
+	//メインカメラのタグ名 constは定数(絶対に変わらない値)
+	private const string MAIN_CAMERA_TAG_NAME = "MainCamera";
+	//カメラに映ってるかの判定
+	private bool isRendered = false;
+
 	// Use this for initialization
 	void Start () {
 		rigidbody2D = GetComponent<Rigidbody2D> ();
@@ -18,18 +23,22 @@ public class Enemy1Script : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		rigidbody2D.velocity = new Vector2 (speed, rigidbody2D.velocity.y);
+		if (isRendered) {
+			rigidbody2D.velocity = new Vector2 (speed, rigidbody2D.velocity.y);
+		}
 	}
 
 	void OnTriggerEnter2D (Collider2D col)
 	{
-		if (col.tag == "Bullet") {
-			Destroy (gameObject);
-			Instantiate (explosion, transform.position, transform.rotation);
+		if (isRendered) {
+			if (col.tag == "Bullet") {
+				Destroy (gameObject);
+				Instantiate (explosion, transform.position, transform.rotation);
 
-			//1/4の確立でアイテムを落とす
-			if (Random.Range (0, 4) == 0) {
-				Instantiate (item, transform.position, transform.rotation);
+				//1/4の確立でアイテムを落とす
+				if (Random.Range (0, 4) == 0) {
+					Instantiate (item, transform.position, transform.rotation);
+				}
 			}
 		}
 	}
@@ -40,6 +49,14 @@ public class Enemy1Script : MonoBehaviour {
 		if (col.gameObject.tag == "UnityChan") {
 			//LifeScriptのLifeDownメソッドを実行
 			lifeScript.LifeDown(attackPoint);
+		}
+	}
+
+	void OnWillRenderObject()
+	{
+		//メインカメラに映ったときだけisRenderedをtrue
+		if (Camera.current.tag == MAIN_CAMERA_TAG_NAME) {
+			isRendered = true;
 		}
 	}
 }
